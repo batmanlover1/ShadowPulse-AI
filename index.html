@@ -4,171 +4,178 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080b12">
-  <title>ShadowPulse | Personal AI</title>
+  <title>ShadowPulse | Secure AI</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; }
     body {
-      margin: 0;
-      background: #080b12;
-      color: #eaf1ff;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      min-height: 100vh;
+      margin: 0; min-height: 100vh; background: #080b12;
+      color: #eaf1ff; font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     }
     header {
-      padding: 22px;
-      border-bottom: 1px solid #233147;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 20px; border-bottom: 1px solid #233147;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .brand {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: 2px;
-    }
-    .brand span { color: #5bd6ff; }
-    .status {
-      color: #69f0ae;
-      font-size: 11px;
-      letter-spacing: 1px;
-    }
-    main {
-      max-width: 850px;
-      margin: auto;
-      padding: 26px 18px;
-    }
+    .brand { font-size: 21px; font-weight: 800; letter-spacing: 2px; }
+    .brand span, .blue { color: #5bd6ff; }
+    main { max-width: 680px; margin: auto; padding: 28px 18px; }
     .panel {
-      border: 1px solid #233147;
-      background: #0d1420;
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 18px;
-    }
-    .eyebrow {
-      color: #5bd6ff;
-      font-size: 11px;
-      letter-spacing: 2px;
-    }
-    h1 { font-size: 30px; margin: 12px 0; }
-    p { color: #a8b7cc; line-height: 1.6; }
-    .orb {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      margin: 24px auto;
-      border: 2px solid #5bd6ff;
-      box-shadow: 0 0 30px #1674a955, inset 0 0 24px #1674a944;
-      display: grid;
-      place-items: center;
-      color: #5bd6ff;
-      font-size: 34px;
+      background: #0d1420; border: 1px solid #233147;
+      border-radius: 14px; padding: 22px; margin-bottom: 18px;
     }
     .center { text-align: center; }
-    .button {
-      border: 1px solid #5bd6ff;
-      background: #102438;
-      color: #eaf8ff;
-      border-radius: 8px;
-      padding: 13px 18px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .button:active { background: #1a3b55; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-    .value { font-size: 18px; margin-top: 10px; }
-    #reply {
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      min-height: 24px;
-    }
+    .eyebrow { color: #5bd6ff; font-size: 11px; letter-spacing: 2px; }
+    h1 { font-size: 28px; }
+    p { color: #a8b7cc; line-height: 1.6; }
     input {
-      width: 100%;
-      background: #080b12;
-      border: 1px solid #30425a;
-      border-radius: 8px;
-      padding: 13px;
-      color: white;
-      font-size: 16px;
-      margin: 10px 0;
+      width: 100%; margin: 8px 0 14px; padding: 14px;
+      color: white; background: #080b12; border: 1px solid #30425a;
+      border-radius: 8px; font-size: 16px;
     }
-    footer {
-      color: #64748b;
-      text-align: center;
-      padding: 20px;
-      font-size: 11px;
+    button {
+      width: 100%; padding: 14px; border-radius: 8px;
+      border: 1px solid #5bd6ff; background: #102438;
+      color: white; font-size: 15px; cursor: pointer; margin-top: 8px;
     }
-    @media (max-width: 480px) {
-      h1 { font-size: 25px; }
-      .grid { grid-template-columns: 1fr; }
-      header { padding: 17px; }
+    button:disabled { opacity: .5; }
+    #message { overflow-wrap: anywhere; }
+    .orb {
+      height: 90px; width: 90px; margin: 22px auto;
+      border: 2px solid #5bd6ff; border-radius: 50%;
+      box-shadow: 0 0 28px #1674a955;
+      display: grid; place-items: center; color: #5bd6ff; font-size: 27px;
     }
+    .hidden { display: none !important; }
+    footer { text-align: center; color: #64748b; padding: 20px; font-size: 11px; }
   </style>
 </head>
 <body>
   <header>
     <div class="brand">SHADOW<span>PULSE</span></div>
-    <div class="status">● INTERFACE ONLINE</div>
+    <div class="eyebrow">SECURE TERMINAL</div>
   </header>
+
   <main>
-    <section class="panel center">
-      <div class="eyebrow">PERSONAL COMMAND SYSTEM</div>
-      <h1>Welcome back, Operator.</h1>
-      <p>Your command center is ready.</p>
-      <div class="orb">SP</div>
-      <div class="eyebrow">SHADOWPULSE CORE</div>
-      <p id="reply">Interface initialized. AI connection pending.</p>
-    </section>
-    <section class="panel">
-      <div class="eyebrow">COMMAND TERMINAL</div>
-      <p>Enter a message to test the interface.</p>
-      <form id="commandForm">
-        <input id="command" placeholder="Enter command..." autocomplete="off">
-        <button class="button" type="submit">Run Command →</button>
+    <section id="login" class="panel">
+      <div class="center">
+        <div class="eyebrow">PERSONAL ACCESS SYSTEM</div>
+        <h1>Identity verification</h1>
+        <p>Sign in to access ShadowPulse.</p>
+      </div>
+      <form id="loginForm">
+        <label for="email">Your email</label>
+        <input id="email" type="email" autocomplete="username"
+          placeholder="harkyn.phillips@gmail.com" required>
+        <label for="password">harkattack628</label>
+        <input id="password" type="password" autocomplete="current-password"
+          placeholder="Password" required>
+        <button id="loginButton" type="submit">Authenticate →</button>
       </form>
+      <p id="message" role="status"></p>
     </section>
-    <div class="grid">
-      <section class="panel">
-        <div class="eyebrow">AI CORE</div>
-        <div class="value">Awaiting connection</div>
-        <p>AI will be connected in a later step.</p>
-      </section>
-      <section class="panel">
-        <div class="eyebrow">VOICE MODULE</div>
-        <div class="value">Standby</div>
-        <p>Voice features will be added later.</p>
-      </section>
-      <section class="panel">
-        <div class="eyebrow">MARKET WATCH</div>
-        <div class="value">Not connected</div>
-        <p>No live market data is being retrieved.</p>
-      </section>
-      <section class="panel">
-        <div class="eyebrow">SECURITY</div>
-        <div class="value">Setup required</div>
-        <p>Authentication has not been configured.</p>
-      </section>
-    </div>
+
+    <section id="dashboard" class="hidden">
+      <div class="panel center">
+        <div class="eyebrow">PERSONAL COMMAND SYSTEM</div>
+        <h1>Welcome back, Operator.</h1>
+        <div class="orb">SP</div>
+        <p>Signed in. The AI connection has not been configured yet.</p>
+        <button id="logoutButton">Lock system / Sign out</button>
+      </div>
+    </section>
   </main>
-  <footer>SHADOWPULSE // PERSONAL SYSTEM // BUILD 001</footer>
+
+  <footer>SHADOWPULSE // PERSONAL SYSTEM</footer>
+
   <script>
-    const form = document.getElementById("commandForm");
-    const command = document.getElementById("command");
-    const reply = document.getElementById("reply");
-    form.addEventListener("submit", function(event) {
-      event.preventDefault();
-      const text = command.value.trim();
-      if (!text) {
-        reply.textContent = "Please enter a command.";
+    // Replace these placeholders with your own Supabase project values.
+    const SUPABASE_URL = "PASTE_YOUR_PROJECT_URL_HERE";
+    const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+
+    // Use the exact email address of the account you created in Supabase.
+    const ALLOWED_EMAIL = "harkyn.phillips@gmail.com".trim().toLowerCase();
+
+    const login = document.getElementById("login");
+    const dashboard = document.getElementById("dashboard");
+    const message = document.getElementById("message");
+    const loginButton = document.getElementById("loginButton");
+
+    let client;
+
+    function showSession(session) {
+      const validEmail = session?.user?.email?.toLowerCase() === ALLOWED_EMAIL;
+      login.classList.toggle("hidden", !!validEmail);
+      dashboard.classList.toggle("hidden", !validEmail);
+      if (session && !validEmail) {
+        message.textContent = "This account is not authorized.";
+        client.auth.signOut();
+      }
+    }
+
+    try {
+      if (
+        https://kouwhkkvmeqksaybzazp.supabase.co/rest/v1/ &&
+        sb_publishable_bpkEOqQ-Spd11MhY39B0nQ_SGRendZd &&
+        ALLOWED_EMAIL.includes("@")
+      ) {
+        client = window.supabase.createClient(
+          SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY
+        );
+
+        client.auth.onAuthStateChange((_event, session) => {
+          showSession(session);
+        });
+
+        client.auth.getSession().then(({ data, error }) => {
+          if (error) message.textContent = error.message;
+          showSession(data?.session);
+        });
+      } else {
+        message.textContent =
+          "Setup required: add your project URL, publishable key, and email in the code.";
+      }
+    } catch (error) {
+      message.textContent = "Setup error. Check your configuration.";
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      if (!client) {
+        message.textContent = "Add your Supabase settings first.";
         return;
       }
-      reply.textContent =
-        "Command received: " + text +
-        "\nAI connection pending. Your command has not been sent to an AI.";
-      command.value = "";
+
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value;
+
+      if (email !== ALLOWED_EMAIL) {
+        message.textContent = "Access denied.";
+        return;
+      }
+
+      loginButton.disabled = true;
+      message.textContent = "Verifying credentials...";
+
+      try {
+        const { data, error } = await client.auth.signInWithPassword({
+          email, password
+        });
+        if (error) throw error;
+        showSession(data.session);
+        message.textContent = "";
+      } catch {
+        message.textContent = "Sign-in failed. Check your email and password.";
+      } finally {
+        loginButton.disabled = false;
+      }
+    });
+
+    document.getElementById("logoutButton").addEventListener("click", async () => {
+      await client?.auth.signOut();
+      dashboard.classList.add("hidden");
+      login.classList.remove("hidden");
+      document.getElementById("password").value = "";
+      message.textContent = "System locked.";
     });
   </script>
 </body>
